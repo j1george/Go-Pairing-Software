@@ -1,5 +1,5 @@
 # Go-Pairing-Software
-Making a go pairing software for the Bay Area Go Players Association (Tasked by Thomas Rike).
+Making a go pairing software for fun for the Bay Area Go Players Association.
 Written in Java for portability.
 
 # To run
