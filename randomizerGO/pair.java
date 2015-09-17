@@ -6,32 +6,35 @@ class Pair{
 	
 	private List<Players> allPlayers;
 	
+	//Add a randomizer for who gets black and who gets white
+	//Add another private data field for a temporary list of allPlayers for each round, gets reset
+	
 	//Following method needed?
 	private List<Players> playersMatchedHighDan;
 	private List<Players> playersMatchedLowDanHighKyu;
 	private List<Players> playersMatchedHighLowKyu;
 	private List<Players> playersMatchedLowKyu;
 	
-	//need test, add better comment
-	private boolean checkPairings(Players p1, Players p2){
-		for(int i = 0; i<4; i++){
-			if(p1.getName() == p2.getMatchedPlayers(i).getName()){
+	//seemingly works, add comment
+	private boolean checkPairings(Players p1, Players p2, int round){
+		for(int i = 0; i<round; i++){
+			if(p2.getName() == p1.getMatchedPlayers(i).getName()){
 					return true;
 			}
 		}
 		return false;
 	}
 	
-	//need test, add better comment
+	//works, add comment
 	private List<Players> copy(){
 		List<Players> newList = new ArrayList<Players>();
 		for(int i = 0; i<allPlayers.size(); i++){
-			newList.add(allPlayers.get(0));
+			newList.add(allPlayers.get(i));
 		}
 		return newList;
 	}
 	
-	//need test, add better comment
+	//seemingly works
 	private int findPlayers(Players p, List<Players> arr){
 		int i = 0;
 		for(int j = 0; j<arr.size(); j++){
@@ -66,22 +69,23 @@ class Pair{
 		input2.close();
 	}
 	
-	//need test, add better comment
-	public void pairPlayers(Players current, int i){
-		//copy allPlayers array. In copy, remove current player. Then call a random number generator
-		//Then add the matched player, using the RNG, to current player's array of matched players.
+	//Seemingly works, need comment
+	public void pairPlayers(Players current, int round){
 		List<Players> temp = copy();
 		Random randomGenerator = new Random();
 		int indexOfFound = findPlayers(current, temp);
 		temp.remove(indexOfFound);
 		int randomNumber = randomGenerator.nextInt(temp.size());
-		checkPairings(current, temp.get(randomNumber));
-		current.addMatchedPlayers(i, temp.get(randomNumber));
+		//Check pairings. If pairings have been made, do randomNumberGenerator again?
+		if(round>0){
+			checkPairings(current, temp.get(randomNumber), round);
+		}
+		current.addMatchedPlayers(round, temp.get(randomNumber));
+		temp.get(randomNumber).addMatchedPlayers(round, current);
 	}
 	
-	//Need fix
+	//works, add better comment
 	public void sortByRank(){
-		List<Players> tempArray = new ArrayList<Players>();
 		int minIndex = 0;
 		int run = allPlayers.size()-1;
 		for(int i = 0; i<run; i++){
@@ -92,13 +96,13 @@ class Pair{
 				}
 			}
 			if(minIndex != i){
-				tempArray.add(allPlayers.get(minIndex));
-				/*int temp = numbers[minIndex];
-				numbers[minIndex] = numbers[i];
-				numbers[i] = temp;*/
+				Players temp = allPlayers.get(minIndex);
+				allPlayers.remove(minIndex);
+				allPlayers.add(minIndex, allPlayers.get(i));
+				allPlayers.remove(i);
+				allPlayers.add(i, temp);
 			}
 		}
-		allPlayers = tempArray;
 	}
 	
 	//works, add better comment
@@ -114,12 +118,10 @@ class Pair{
 	public static void main(String args[]){
 		Pair derp = new Pair();
 		derp.addAllPlayers();
-		for(int i = 0; i<derp.getSize(); i++){
-			System.out.println(derp.getPlayer(i).getName());
-		}
 		derp.sortByRank();
-		for(int i = 0; i<derp.getSize(); i++){
-			System.out.println(derp.getPlayer(i).getName());
-		}
+		derp.pairPlayers(derp.getPlayer(1), 0);
+		Players test = derp.getPlayer(1).getMatchedPlayers(0);
+		System.out.println(derp.getPlayer(1).getName());
+		System.out.println(test.getName());
 	}
 }

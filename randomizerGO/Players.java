@@ -3,6 +3,8 @@ package randomizerGO;
 import java.util.*;
 
 class Players{
+	//Change playerID to playerPoints
+	//Make another file for Results to edit playerPoints
 	private int playerID;
 	private int rank;
 	private String playerName;
@@ -36,8 +38,8 @@ class Players{
 		return matchedPlayers[i];
 	}
 	
-	public void addMatchedPlayers(int i, Players name){
-		matchedPlayers[i] = name;
+	public void addMatchedPlayers(int round, Players name){
+		matchedPlayers[round] = name;
 	}
 	
 	public static void main(String args[]){
