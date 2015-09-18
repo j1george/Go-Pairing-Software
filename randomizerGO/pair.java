@@ -7,25 +7,32 @@ class Pair{
 	private List<Players> allPlayers;
 	private List<Players> secondPlayersList;
 	
-	//Add a randomizer for who gets black and who gets white
+	//add UI
+	//Find a way to implement the bottom
+	//private List<Players> playersMatchedHighDan;
+	//private List<Players> playersMatchedLowDanHighKyu;
+	//private List<Players> playersMatchedHighLowKyu;
+	//private List<Players> playersMatchedLowKyu;
 	
-	//Find a way to implement
-	private List<Players> playersMatchedHighDan;
-	private List<Players> playersMatchedLowDanHighKyu;
-	private List<Players> playersMatchedHighLowKyu;
-	private List<Players> playersMatchedLowKyu;
-	
-	//seemingly works, add comment
+	/*
+	 * Method to check if pairings have been made and also check if both players have the same points
+	 * Checking if points are same to enforce winners playing against winners and losers against losers
+	 * set as private because it's a helper method to the pair() method.
+	 */
 	private boolean checkPairings(Players p1, Players p2, int round){
 		for(int i = 0; i<round; i++){
-			if(p2.getName() == p1.getMatchedPlayers(i).getName()){
+			if((p2.getName().equals(p1.getMatchedPlayers(i).getName())) 
+				&& (p1.getPlayerPoints() == p2.getPlayerPoints())){
 					return true;
 			}
 		}
 		return false;
 	}
 	
-	//seemingly works
+	/*
+	 * Method to find the index of players given an array.
+	 * Helper method when adding and removing players from the second list
+	 */
 	private int findPlayers(String p, List<Players> arr){
 		int i = 0;
 		for(int j = 0; j<arr.size(); j++){
@@ -37,47 +44,73 @@ class Pair{
 		return i;
 	}
 	
-	//works, add better comment
+	//Method to choose colors using a Random object
+	private void chooseColor(Players p1, Players p2){
+		Random col = new Random();
+		int color = col.nextInt(2);
+		if(color == 0){
+			p1.setColor("Black");
+			p2.setColor("White");
+		}else{
+			p2.setColor("Black");
+			p1.setColor("White");
+		}
+	}
+	
+	//Default Constructor.
 	public Pair(){
 		allPlayers = new ArrayList<Players>();
 		secondPlayersList = new ArrayList<Players>();
 	}
 	
-	//works, add better comments
+	/*
+	 * Method to add players to the main list of players, while also copying it to the second list.
+	 * Second list is for keeping track of who's been matched.
+	 */
 	public void addAllPlayers(){
 		Scanner input = new Scanner(System.in);
-		Scanner input2 = new Scanner(System.in);
 		System.out.println("Please enter the number of players who's registered");
 		int num = input.nextInt();
 		for(int i = 0; i<num; i++){
 			System.out.println("Enter each player's rank and name; one by one:");
 			int rank = input.nextInt();
-			String name = input2.nextLine();
+			input.nextLine();
+			String name = input.nextLine();
 			Players newPlayer = new Players(rank, name);
 			allPlayers.add(newPlayer);
 		}
 		secondPlayersList.addAll(allPlayers);
 	}
 	
-	//Seemingly works, need comment
+	/*
+	 * Method to pair players together. Utilizes a random number generator.
+	 * After finding the players to match up and confirming the prerequisites, delete from the
+	 * second list.
+	 * One glitch I've found is that when I enter in 10 players, when it comes to second round pairing
+	 * it will have one match where there's someone who won and someone who lost 
+	 * This is because there's 5 winners and 5 losers, so you can't match within those brackets.
+	 * This will be true for any even numbered list where after the first round, the winner and losers equal an odd.
+	 */
 	public void pairPlayers(Players current, int round){
 		Random randomGenerator = new Random();
 		int indexForRemove = findPlayers(current.getName(), secondPlayersList);
 		secondPlayersList.remove(indexForRemove);
 		int randomNumber = randomGenerator.nextInt(secondPlayersList.size());
-		if(round>0){
-			while(checkPairings(current, secondPlayersList.get(randomNumber), round)){
-				randomNumber = randomGenerator.nextInt(secondPlayersList.size());
-			}
+		while(checkPairings(current, secondPlayersList.get(randomNumber), round)){
+			randomNumber = randomGenerator.nextInt(secondPlayersList.size());
 		}
 		int indexOfFound = findPlayers(current.getName(), allPlayers);
 		int indexOfFound2 = findPlayers(secondPlayersList.get(randomNumber).getName(), allPlayers);
+		chooseColor(allPlayers.get(indexOfFound), allPlayers.get(indexOfFound2));
 		allPlayers.get(indexOfFound).addMatchedPlayers(round, secondPlayersList.get(randomNumber));
 		allPlayers.get(indexOfFound2).addMatchedPlayers(round, current);
 		secondPlayersList.remove(randomNumber);
 	}
 	
-	//works, add better comment
+	/*
+	 * Sorting method, utilizes selection sort. For aesthetic purposes to show each player in descending order
+	 * by rank.
+	 */
 	public void sortByRank(){
 		int minIndex = 0;
 		int run = allPlayers.size()-1;
@@ -98,7 +131,9 @@ class Pair{
 		}
 	}
 	
-	//Probably works, add comment
+	/*
+	 * Method to input results, giving 1 point to winner and 0.5 to loser. Helps for matching up losers and winners.
+	 */
 	public void inputResults(String winner, String loser){
 		int win = findPlayers(winner, allPlayers);
 		int lose = findPlayers(loser, allPlayers);
@@ -106,37 +141,44 @@ class Pair{
 		allPlayers.get(lose).setPlayerPoints(0.5);
 	}
 	
+	/*
+	 * Method to reset second list each round.
+	 */
 	public void resetSecondList(){
 		secondPlayersList.clear();
 		secondPlayersList.addAll(allPlayers);
 	}
 	
+	//Method to print points for each player and player's name
 	public void printPoints(){
 		for(int i = 0; i<allPlayers.size(); i++){
 			System.out.println(allPlayers.get(i).getName()+" Points: "+allPlayers.get(i).getPlayerPoints());
 		}
 	}
 	
+	//method to print the player's name and rank
 	public void printPlayerList(){
 		for(int i = 0; i<allPlayers.size(); i++){
 			System.out.println(allPlayers.get(i).getName()+" Rank: "+allPlayers.get(i).getRank());
 		}
 	}
 	
-	//works, add better comment
+	//getter method for size of the first list
 	public int getSize(){
 		return allPlayers.size();
 	}
 	
+	//getter method for size of the second list
 	public int getSecondListSize(){
 		return secondPlayersList.size();
 	}
 	
-	//works, add better comment
+	//getter method for getting a player from the first list
 	public Players getPlayer(int i){
 		return allPlayers.get(i);
 	}
 	
+	//getter method for getting a player from the second list
 	public Players getPlayerSecondList(int i){
 		return secondPlayersList.get(i);
 	}
@@ -149,6 +191,7 @@ class Pair{
 		Pair derp = new Pair();
 		derp.addAllPlayers();
 		derp.sortByRank();
+		derp.printPlayerList();
 		System.out.println("----------------------");
 		while(loop){
 			for(int i = 0; i<derp.getSize()/2; i++){
@@ -168,6 +211,8 @@ class Pair{
 				String loser = input.nextLine();
 				derp.inputResults(winner, loser);
 			}
+			System.out.println("----------------------");
+			derp.printPoints();
 			System.out.println("----------------------");
 			if(round == 3){
 				loop = false;

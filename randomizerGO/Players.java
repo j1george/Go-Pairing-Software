@@ -1,13 +1,12 @@
 package randomizerGO;
 
-import java.util.*;
-
 class Players{
 	
 	private double playerPoints = 0.0;
 	private int rank;
 	private String playerName;
 	private Players matchedPlayers[] = new Players[4];
+	private StringBuilder color = new StringBuilder();
 	
 	public Players(){
 		rank = 0;
@@ -39,12 +38,22 @@ class Players{
 		return matchedPlayers[i];
 	}
 	
+	public StringBuilder getColor(){
+		return color;
+	}
+	
+	public void setColor(String c){
+		color.setLength(0);
+		color.append(c);
+	}
+	
 	public void addMatchedPlayers(int round, Players name){
 		matchedPlayers[round] = name;
 	}
 	
 	public void displayMatchUps(int round){
-		System.out.println(getName()+" vs "+getMatchedPlayers(round).getName());
+		System.out.println(getName()+" "+getColor()+" vs "+getMatchedPlayers(round).getName()+
+				" "+getMatchedPlayers(round).getColor());
 	}
 	
 	public static void main(String args[]){
