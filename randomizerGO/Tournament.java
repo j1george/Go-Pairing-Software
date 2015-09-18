@@ -2,7 +2,7 @@ package randomizerGO;
 
 import java.util.*;
 
-class Pair{
+class Tournament{
 	
 	private List<Players> allPlayers;
 	private List<Players> secondPlayersList;
@@ -13,6 +13,7 @@ class Pair{
 	//private List<Players> playersMatchedLowDanHighKyu;
 	//private List<Players> playersMatchedHighLowKyu;
 	//private List<Players> playersMatchedLowKyu;
+	//exception handling
 	
 	/*
 	 * Method to check if pairings have been made and also check if both players have the same points
@@ -58,7 +59,7 @@ class Pair{
 	}
 	
 	//Default Constructor.
-	public Pair(){
+	public Tournament(){
 		allPlayers = new ArrayList<Players>();
 		secondPlayersList = new ArrayList<Players>();
 	}
@@ -96,8 +97,10 @@ class Pair{
 		int indexForRemove = findPlayers(current.getName(), secondPlayersList);
 		secondPlayersList.remove(indexForRemove);
 		int randomNumber = randomGenerator.nextInt(secondPlayersList.size());
-		while(checkPairings(current, secondPlayersList.get(randomNumber), round)){
-			randomNumber = randomGenerator.nextInt(secondPlayersList.size());
+		if(secondPlayersList.size() > 2){
+			while(checkPairings(current, secondPlayersList.get(randomNumber), round)){
+				randomNumber = randomGenerator.nextInt(secondPlayersList.size());
+			}
 		}
 		int indexOfFound = findPlayers(current.getName(), allPlayers);
 		int indexOfFound2 = findPlayers(secondPlayersList.get(randomNumber).getName(), allPlayers);
@@ -188,7 +191,7 @@ class Pair{
 		boolean loop = true;
 		int round = 0;
 		Random playerRand = new Random();
-		Pair derp = new Pair();
+		Tournament derp = new Tournament();
 		derp.addAllPlayers();
 		derp.sortByRank();
 		derp.printPlayerList();
