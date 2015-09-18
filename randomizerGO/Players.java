@@ -3,27 +3,28 @@ package randomizerGO;
 import java.util.*;
 
 class Players{
-	//Change playerID to playerPoints
-	//Make another file for Results to edit playerPoints
-	private int playerID;
+	
+	private double playerPoints = 0.0;
 	private int rank;
 	private String playerName;
 	private Players matchedPlayers[] = new Players[4];
 	
 	public Players(){
-		playerID = 0;
 		rank = 0;
 		playerName = "";
 	}
 	
-	public Players(int ID, int r, String name){
-		playerID = ID;
+	public Players(int r, String name){
 		rank = r;
 		playerName = name;
 	}
 	
-	public int getPlayerID(){
-		return playerID;
+	public double getPlayerPoints(){
+		return playerPoints;
+	}
+	
+	public void setPlayerPoints(double point){
+		playerPoints += point;
 	}
 	
 	public int getRank(){
@@ -42,14 +43,15 @@ class Players{
 		matchedPlayers[round] = name;
 	}
 	
+	public void displayMatchUps(int round){
+		System.out.println(getName()+" vs "+getMatchedPlayers(round).getName());
+	}
+	
 	public static void main(String args[]){
-		Players test = new Players(92146, 5, "David Chau");
-		Players test2 = new Players(921, 6, "Thomas Rike");
-		Players test3 = new Players(12042, 4, "Roger Schrag");
-		System.out.println(test.getPlayerID());
+		Players test = new Players(5, "David Chau");
+		Players test2 = new Players(6, "Thomas Rike");
+		System.out.println(test.getPlayerPoints());
 		test.addMatchedPlayers(0, test2);
-		test.addMatchedPlayers(1, test3);
-		Players get = test.getMatchedPlayers(0);
-		System.out.println(get.getName());
+		test.displayMatchUps(0);
 	}
 }

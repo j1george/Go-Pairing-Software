@@ -5,11 +5,11 @@ import java.util.*;
 class Pair{
 	
 	private List<Players> allPlayers;
+	private List<Players> secondPlayersList;
 	
 	//Add a randomizer for who gets black and who gets white
-	//Add another private data field for a temporary list of allPlayers for each round, gets reset
 	
-	//Following method needed?
+	//Find a way to implement
 	private List<Players> playersMatchedHighDan;
 	private List<Players> playersMatchedLowDanHighKyu;
 	private List<Players> playersMatchedHighLowKyu;
@@ -25,20 +25,11 @@ class Pair{
 		return false;
 	}
 	
-	//works, add comment
-	private List<Players> copy(){
-		List<Players> newList = new ArrayList<Players>();
-		for(int i = 0; i<allPlayers.size(); i++){
-			newList.add(allPlayers.get(i));
-		}
-		return newList;
-	}
-	
 	//seemingly works
-	private int findPlayers(Players p, List<Players> arr){
+	private int findPlayers(String p, List<Players> arr){
 		int i = 0;
 		for(int j = 0; j<arr.size(); j++){
-			if(arr.get(j).getName().equals(p.getName())){
+			if(arr.get(j).getName().equals(p)){
 				i = j;
 				break;
 			}
@@ -49,6 +40,7 @@ class Pair{
 	//works, add better comment
 	public Pair(){
 		allPlayers = new ArrayList<Players>();
+		secondPlayersList = new ArrayList<Players>();
 	}
 	
 	//works, add better comments
@@ -58,30 +50,31 @@ class Pair{
 		System.out.println("Please enter the number of players who's registered");
 		int num = input.nextInt();
 		for(int i = 0; i<num; i++){
-			System.out.println("Enter each player's ID, rank, and name; one by one:");
-			int ID = input.nextInt();
+			System.out.println("Enter each player's rank and name; one by one:");
 			int rank = input.nextInt();
 			String name = input2.nextLine();
-			Players newPlayer = new Players(ID, rank, name);
+			Players newPlayer = new Players(rank, name);
 			allPlayers.add(newPlayer);
 		}
-		input.close();
-		input2.close();
+		secondPlayersList.addAll(allPlayers);
 	}
 	
 	//Seemingly works, need comment
 	public void pairPlayers(Players current, int round){
-		List<Players> temp = copy();
 		Random randomGenerator = new Random();
-		int indexOfFound = findPlayers(current, temp);
-		temp.remove(indexOfFound);
-		int randomNumber = randomGenerator.nextInt(temp.size());
-		//Check pairings. If pairings have been made, do randomNumberGenerator again?
+		int indexForRemove = findPlayers(current.getName(), secondPlayersList);
+		secondPlayersList.remove(indexForRemove);
+		int randomNumber = randomGenerator.nextInt(secondPlayersList.size());
 		if(round>0){
-			checkPairings(current, temp.get(randomNumber), round);
+			while(checkPairings(current, secondPlayersList.get(randomNumber), round)){
+				randomNumber = randomGenerator.nextInt(secondPlayersList.size());
+			}
 		}
-		current.addMatchedPlayers(round, temp.get(randomNumber));
-		temp.get(randomNumber).addMatchedPlayers(round, current);
+		int indexOfFound = findPlayers(current.getName(), allPlayers);
+		int indexOfFound2 = findPlayers(secondPlayersList.get(randomNumber).getName(), allPlayers);
+		allPlayers.get(indexOfFound).addMatchedPlayers(round, secondPlayersList.get(randomNumber));
+		allPlayers.get(indexOfFound2).addMatchedPlayers(round, current);
+		secondPlayersList.remove(randomNumber);
 	}
 	
 	//works, add better comment
@@ -105,9 +98,38 @@ class Pair{
 		}
 	}
 	
+	//Probably works, add comment
+	public void inputResults(String winner, String loser){
+		int win = findPlayers(winner, allPlayers);
+		int lose = findPlayers(loser, allPlayers);
+		allPlayers.get(win).setPlayerPoints(1);
+		allPlayers.get(lose).setPlayerPoints(0.5);
+	}
+	
+	public void resetSecondList(){
+		secondPlayersList.clear();
+		secondPlayersList.addAll(allPlayers);
+	}
+	
+	public void printPoints(){
+		for(int i = 0; i<allPlayers.size(); i++){
+			System.out.println(allPlayers.get(i).getName()+" Points: "+allPlayers.get(i).getPlayerPoints());
+		}
+	}
+	
+	public void printPlayerList(){
+		for(int i = 0; i<allPlayers.size(); i++){
+			System.out.println(allPlayers.get(i).getName()+" Rank: "+allPlayers.get(i).getRank());
+		}
+	}
+	
 	//works, add better comment
 	public int getSize(){
 		return allPlayers.size();
+	}
+	
+	public int getSecondListSize(){
+		return secondPlayersList.size();
 	}
 	
 	//works, add better comment
@@ -115,13 +137,44 @@ class Pair{
 		return allPlayers.get(i);
 	}
 	
+	public Players getPlayerSecondList(int i){
+		return secondPlayersList.get(i);
+	}
+	
 	public static void main(String args[]){
+		Scanner input = new Scanner(System.in);
+		boolean loop = true;
+		int round = 0;
+		Random playerRand = new Random();
 		Pair derp = new Pair();
 		derp.addAllPlayers();
 		derp.sortByRank();
-		derp.pairPlayers(derp.getPlayer(1), 0);
-		Players test = derp.getPlayer(1).getMatchedPlayers(0);
-		System.out.println(derp.getPlayer(1).getName());
-		System.out.println(test.getName());
+		System.out.println("----------------------");
+		while(loop){
+			for(int i = 0; i<derp.getSize()/2; i++){
+				int randomPlayerIndex = playerRand.nextInt(derp.getSecondListSize());
+				derp.pairPlayers(derp.getPlayerSecondList(randomPlayerIndex), round);
+			}
+			for(int i = 0; i<derp.getSize(); i++){
+				derp.getPlayer(i).displayMatchUps(round);
+			}
+			System.out.println("----------------------");
+			derp.resetSecondList();
+			System.out.println("Please enter the results for round "+(round+1));
+			for(int i = 0; i<derp.getSize()/2; i++){
+				System.out.println("Type the winner here: ");
+				String winner = input.nextLine();
+				System.out.println("Type the loser here: ");
+				String loser = input.nextLine();
+				derp.inputResults(winner, loser);
+			}
+			System.out.println("----------------------");
+			if(round == 3){
+				loop = false;
+				System.out.println("This tournament is over, bye");
+			}
+			round++;
+		}
+		input.close();
 	}
 }

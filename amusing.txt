@@ -1,0 +1,92 @@
+Please enter the number of players who's registered
+10
+Enter each player's rank and name; one by one:
+7
+Matthew Burrall
+Enter each player's rank and name; one by one:
+-6
+Thomas Rike
+Enter each player's rank and name; one by one:
+-5
+David Chau
+Enter each player's rank and name; one by one:
+-4
+Roger Schrag
+Enter each player's rank and name; one by one:
+6
+Vanessa Wong
+Enter each player's rank and name; one by one:
+-6
+Matt Mo
+Enter each player's rank and name; one by one:
+-4
+Tai-An Cha
+Enter each player's rank and name; one by one:
+3
+Steven Burrall
+Enter each player's rank and name; one by one:
+1
+Jay Chan
+Enter each player's rank and name; one by one:
+3
+Linden Chiu
+Thomas Rike Rank: -6
+Matt Mo Rank: -6
+David Chau Rank: -5
+Roger Schrag Rank: -4
+Tai-An Cha Rank: -4
+Jay Chan Rank: 1
+Steven Burrall Rank: 3
+Linden Chiu Rank: 3
+Vanessa Wong Rank: 6
+Matthew Burrall Rank: 7
+----------------------
+Thomas Rike vs Vanessa Wong
+Matt Mo vs Roger Schrag
+David Chau vs Matthew Burrall
+Roger Schrag vs Matt Mo
+Tai-An Cha vs Linden Chiu
+Jay Chan vs Steven Burrall
+Steven Burrall vs Jay Chan
+Linden Chiu vs Tai-An Cha
+Vanessa Wong vs Thomas Rike
+Matthew Burrall vs David Chau
+Please enter the results for round 1
+----------------------
+Thomas Rike vs Jay Chan
+Matt Mo vs Linden Chiu
+David Chau vs Steven Burrall
+Roger Schrag vs Tai-An Cha
+Tai-An Cha vs Roger Schrag
+Jay Chan vs Thomas Rike
+Steven Burrall vs David Chau
+Linden Chiu vs Matt Mo
+Vanessa Wong vs Matthew Burrall
+Matthew Burrall vs Vanessa Wong
+Please enter the results for round 2
+----------------------
+Thomas Rike vs Matthew Burrall
+Matt Mo vs Vanessa Wong
+David Chau vs Linden Chiu
+Roger Schrag vs Steven Burrall
+Tai-An Cha vs Jay Chan
+Jay Chan vs Tai-An Cha
+Steven Burrall vs Roger Schrag
+Linden Chiu vs David Chau
+Vanessa Wong vs Matt Mo
+Matthew Burrall vs Thomas Rike
+Please enter the results for round 3
+----------------------
+Thomas Rike vs Tai-An Cha
+Matt Mo vs Matthew Burrall
+David Chau vs Roger Schrag
+Roger Schrag vs David Chau
+Tai-An Cha vs Thomas Rike
+Jay Chan vs Vanessa Wong
+Steven Burrall vs Linden Chiu
+Linden Chiu vs Steven Burrall
+Vanessa Wong vs Jay Chan
+Matthew Burrall vs Matt Mo
+Please enter the results for round 4
+This tournament is over, bye
+----------------------

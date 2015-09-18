@@ -6,4 +6,4 @@ Written in Java for portability.
 For an IDE: Load the project files into your IDE. Click Run
 <br>For command line: Assuming you're in the directory, write
 <br>  javac randomizerGO/*.java
-<br>  java randomizerGO.pair(when I make this file)
+<br>  java randomizerGO.Pair
